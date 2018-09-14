@@ -71,14 +71,14 @@ public class LatentSemanticAnalysis
      * Train model by corpus
      * @param corpus {@linkplain darks.learning.corpus.Corpus Corpus}
      */
-    public void train(Corpus corpus)
+    public DoubleMatrix train(Corpus corpus)
     {
     	tfidf = corpus.getTfIDF();
         DoubleMatrix trainMatrix = initTrainData();
-        train(tfidf, trainMatrix);
+        return train(tfidf, trainMatrix);
     }
     
-    public void train(TfIdf tfidf, DoubleMatrix trainMatrix)
+    public DoubleMatrix train(TfIdf tfidf, DoubleMatrix trainMatrix)
     {
         if (tfidf == null)
         {
@@ -86,7 +86,9 @@ public class LatentSemanticAnalysis
         }
         log.info("Start to train LSA algorithm.");
         long st = System.currentTimeMillis();
-        log.info("Training LSA...");
+        log.info("Training LSA with K=" + Integer.toString(K) + "...");
+        log.info("trainMatrix " + String.valueOf(trainMatrix.getRows()) + "x" +
+			String.valueOf(trainMatrix.getColumns()));
 //        trainMatrix = trainMatrix.getRange(0, 400, 0, 500);
         DoubleMatrix[] USV = svd(trainMatrix);
         
@@ -103,8 +105,8 @@ public class LatentSemanticAnalysis
         log.info("Complete to train LSA.preMatrix(" + preMatrix.rows + "," + preMatrix.columns + ") InvS:" 
                             + inverseS.rows + "," + inverseS.columns + ")");
         log.info("LSA training cost " + (System.currentTimeMillis() - st) + "ms");
+        return preMatrix;
     }
-
 
     /**
      * Predict target sentence content by words' array
@@ -203,7 +205,7 @@ public class LatentSemanticAnalysis
     {
         int corpusCount = (int)tfidf.getTotalSentenceCount();
         int wordsCount = (int)tfidf.getUniqueWordsCount();
-        log.debug("Initialize LSA training data " + corpusCount + " * " + wordsCount);
+        log.info("Initialize LSA training data " + corpusCount + " * " + wordsCount);
         DoubleMatrix result = new DoubleMatrix(wordsCount, corpusCount);
         int columnIndex = 0;
         int rowIndex = 0;
