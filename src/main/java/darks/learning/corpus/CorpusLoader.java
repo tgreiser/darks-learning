@@ -42,13 +42,13 @@ import darks.learning.exceptions.CorpusException;
 public class CorpusLoader
 {
 	
-	private static Logger log = LoggerFactory.getLogger(CorpusLoader.class);
+	protected static Logger log = LoggerFactory.getLogger(CorpusLoader.class);
 
-	private StopwordDictionary stopwordDictionary = new StopwordDictionary();
+	protected StopwordDictionary stopwordDictionary = new StopwordDictionary();
 	
 	private List<CorpusFilter> corpusFilters = new LinkedList<CorpusFilter>();
 	
-	private int corpusType = Corpus.TYPE_WORD_FREQ;
+	protected int corpusType = Corpus.TYPE_WORD_FREQ;
 	
 	public CorpusLoader()
 	{
@@ -168,7 +168,7 @@ public class CorpusLoader
 		}
 	}
 	
-	private boolean checkFilter(String s)
+	protected boolean checkFilter(String s)
 	{
 		for (CorpusFilter filter : corpusFilters)
 		{
